@@ -1,0 +1,68 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'com.google.protobuf' version '0.8.12'
+}
+
+group 'com.flags'
+version '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+tasks {
+    processResources {
+        dependsOn ':extractProto'
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+    compileJava {
+        options.deprecation = true
+    }
+    compileTestJava {
+        options.deprecation = true
+    }
+}
+
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.11.0"
+    }
+    generateProtoTasks {}
+}
+dependencies {
+    implementation 'io.grpc:grpc-protobuf:1.42.1'
+
+    implementation 'com.google.guava:guava:31.0.1-jre'
+    implementation 'org.javassist:javassist:3.28.0-GA'
+    implementation 'com.google.flogger:flogger:0.7.4'
+    implementation 'com.google.flogger:flogger-system-backend:0.7.4'
+    protobuf files('src/main/resources/flag_data.proto')
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    testCompileOnly 'junit:junit:4.13.2'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'
+}
+
+test {
+    useJUnitPlatform()
+    dependsOn jar
+    doFirst {
+        classpath += jar.outputs.files
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = [new File(buildDir as String, 'generated/source'), 'src/main/java']
+        }
+    }
+}
+
+idea {
+    module {
+        generatedSourceDirs += file('build/generated/source')
+    }
+}
