@@ -21,7 +21,7 @@ jobs:
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: ./gradlew build
+        arguments: build
 
   test: 
     runs-on: ubuntu-latest
@@ -36,4 +36,4 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: ./gradlew test
+          arguments: test
