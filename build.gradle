@@ -74,7 +74,7 @@ publishing {
             name = "GitHubPackages"
             url = uri('https://maven.pkg.github.com/pearlsteinj/JavaFlags')
             credentials {
-                username = 'pearlsteinj'
+                username = System.getenv('USERNAME')
                 password = System.getenv('DEPLOY_TOKEN')
             }
         }
